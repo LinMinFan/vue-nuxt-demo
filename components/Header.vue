@@ -1,6 +1,6 @@
 <script>
 export default {
-    layout: 'default',
+    name: 'Header',
     data() {
         return {
 
@@ -16,9 +16,7 @@ export default {
 </script>
 
 <template>
-    <div>
-        
-    </div>
+    
 </template>
 
 <style scoped>

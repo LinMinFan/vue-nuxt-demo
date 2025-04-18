@@ -1,6 +1,6 @@
 <script>
 export default {
-    layout: 'default',
+    name: 'Footer',
     data() {
         return {
 
