@@ -15,28 +15,46 @@ export default {
       { name: 'format-detection', content: 'telephone=no' }
     ],
     link: [
-      { rel: 'icon', type: 'image/x-icon', href: '@/static/imgs/theme/favico.svg' },
+      { rel: 'icon', type: 'image/x-icon', href: '/favico.svg' },
+      { rel: 'stylesheet', href: '/css/vendors/normalize.css' },
+      { rel: 'stylesheet', href: '/css/vendors/bootstrap.min.css' },
+      { rel: 'stylesheet', href: '/css/vendors/fontawesome-all.min.css' },
+      { rel: 'stylesheet', href: '/css/vendors/wowy-font.css' },
+      { rel: 'stylesheet', href: '/css/plugins/jquery-ui.css' },
+      { rel: 'stylesheet', href: '/css/plugins/magnific-popup.css' },
+      { rel: 'stylesheet', href: '/css/plugins/animate.css' },
+      { rel: 'stylesheet', href: '/css/plugins/select2.min.css' },
+      { rel: 'stylesheet', href: '/css/plugins/slick.css' },
+      { rel: 'stylesheet', href: '/css/plugins/perfect-scrollbar.css' },
+      { rel: 'stylesheet', href: '/css/main.css' },
+    ],
+    script: [
     ]
   },
 
   // Global CSS: https://go.nuxtjs.dev/config-css
   css: [
-    '@/static/css/vendors/normalize.css',
-    '@/static/css/vendors/bootstrap.min.css',
-    '@/static/css/vendors/fontawesome-all.min.css',
-    '@/static/css/vendors/wowy-font.css',
-    '@/static/css/plugins/jquery-ui.css',
-    '@/static/css/plugins/magnific-popup.css',
-    '@/static/css/plugins/animate.css',
-    '@/static/css/plugins/select2.min.css',
-    '@/static/css/plugins/slick.css',
-    '@/static/css/plugins/perfect-scrollbar.css',
-    '@/assets/css/main.css',
   ],
 
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
   plugins: [
-  ],
+    { src: '~/plugins/vendor.js', mode: 'client' },
+    { src: '~/plugins/slick.js', mode: 'client' },
+    { src: '~/plugins/jquery.syotimer.min.js', mode: 'client' },
+    { src: '~/plugins/wow.js', mode: 'client' },
+    { src: '~/plugins/jquery-ui.js', mode: 'client' },
+    { src: '~/plugins/select2.min.js', mode: 'client' },
+    { src: '~/plugins/perfect-scrollbar.js', mode: 'client' },
+    { src: '~/plugins/magnific-popup.js', mode: 'client' },
+    { src: '~/plugins/waypoints.js', mode: 'client' },
+    { src: '~/plugins/counterup.js', mode: 'client' },
+    { src: '~/plugins/jquery.countdown.min.js', mode: 'client' },
+    { src: '~/plugins/images-loaded.js', mode: 'client' },
+    { src: '~/plugins/isotope.js', mode: 'client' },
+    { src: '~/plugins/scrollup.js', mode: 'client' },
+    { src: '~/plugins/jquery.vticker-min.js', mode: 'client' },
+    { src: '~/plugins/main.js', mode: 'client' },
+  ],  
 
   // Auto import components: https://go.nuxtjs.dev/config-components
   components: true,
