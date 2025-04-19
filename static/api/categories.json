@@ -1,0 +1,9 @@
+[
+    { "title": "全部分類", "type": "all" },
+    { "title": "女性服飾", "type": 1 },
+    { "title": "男性服飾", "type": 2 },
+    { "title": "行動裝置", "type": 3 },
+    { "title": "電腦週邊", "type": 4 },
+    { "title": "生活家電", "type": 5 }
+]
+  

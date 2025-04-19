@@ -38,6 +38,7 @@ export default {
 
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
   plugins: [
+    { src: '~/plugins/jquery.js', mode: 'client' },
     { src: '~/plugins/vendor.js', mode: 'client' },
     { src: '~/plugins/slick.js', mode: 'client' },
     { src: '~/plugins/jquery.syotimer.min.js', mode: 'client' },
@@ -53,6 +54,7 @@ export default {
     { src: '~/plugins/isotope.js', mode: 'client' },
     { src: '~/plugins/scrollup.js', mode: 'client' },
     { src: '~/plugins/jquery.vticker-min.js', mode: 'client' },
+    { src: '~/plugins/vuex-persist.js', mode: 'client' },
     { src: '~/plugins/main.js', mode: 'client' },
   ],  
 

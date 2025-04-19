@@ -1,4 +1,4 @@
-import { MousePosition } from "@/composition-api/tools/useMousePosition.js";
+import langHelper from "@/composition-api/tools/langHelper.js";
 
-export const useMousePosition = MousePosition;
+export const useLangHelper = langHelper;
 
