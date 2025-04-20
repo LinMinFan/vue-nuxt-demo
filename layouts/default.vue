@@ -1,23 +1,31 @@
 <script>
 export default {
-  name: 'DefaultLayout',
-  // 使用 vuex-persist 來持久化 vuex 的狀態
-  /* beforeCreate() {
-    this.$store.dispatch('config/initLang')
-  }, */
+  data() {
+    return {
+      islogin: true,
+    }
+  },
+  methods: {
+    logout() {
+      /* this.$store.dispatch('auth/logout') */
+      this.islogin = false
+    },
+  },
 }
 </script>
 
 <template>
-    <div>
-      <Header />
-      <main>
-        <Nuxt />
-      </main>
-      <Footer />
-    </div>
-  </template>
+  <div>
+    <Header 
+      :islogin="islogin" 
+      :logout="logout" 
+    />
+    <main>
+      <Nuxt />
+    </main>
+    <Footer />
+  </div>
+</template>
 
 <style scoped>
-
 </style>

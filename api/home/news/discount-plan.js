@@ -4,10 +4,10 @@ const url = axios.create({
     baseURL: 'http://localhost:3000/api/',
 });
 
-const getdDscountPlan = () => {
+const getDiscountPlan = () => {
     return url.get('discount-plan.json');
 };
 
 export default {
-    getdDscountPlan,
+    getDiscountPlan,
 };

@@ -1,4 +1,22 @@
+const fs = require('fs');
 const path = require('path');
+
+// 使用絕對路徑讀取檔案
+const languagesPath = path.resolve(__dirname, 'static/api/languages.json');
+let dynamicLocales = [];
+
+try {
+  dynamicLocales = JSON.parse(fs.readFileSync(languagesPath, 'utf8'));
+  console.log('讀取語言檔案成功:', dynamicLocales);
+} catch (error) {
+  console.error('無法讀取語言檔案:', error);
+  // 提供預設值以防讀取失敗
+  dynamicLocales = [
+    { code: "zh-TW", iso: "zh-TW", name: "繁體中文", file: "zh-TW.js" },
+    { code: "zh-CN", iso: "zh-CN", name: "简体中文", file: "zh-CN.js" },
+    { code: "en", iso: "en-US", name: "English", file: "en.js" },
+  ];
+}
 
 export default {
   ssr: true,
@@ -54,10 +72,9 @@ export default {
     { src: '~/plugins/isotope.js', mode: 'client' },
     { src: '~/plugins/scrollup.js', mode: 'client' },
     { src: '~/plugins/jquery.vticker-min.js', mode: 'client' },
-    { src: '~/plugins/vuex-persist.js', mode: 'client' },
+    { src: '~/plugins/vuex-persist.js', mode: 'client' }, // 使用 vuex-persist 來持久化 vuex 的狀態
     { src: '~/plugins/main.js', mode: 'client' },
   ],  
-
   // Auto import components: https://go.nuxtjs.dev/config-components
   components: true,
 
@@ -69,16 +86,31 @@ export default {
   modules: [
     // https://go.nuxtjs.dev/axios
     '@nuxtjs/axios',
+    ['cookie-universal-nuxt'], // Cookie
+    ['nuxt-i18n'], // 處理多語系
   ],
+  router: {
 
+  },
+  i18n: {
+    locales: dynamicLocales,
+    defaultLocale: 'zh-TW',
+    strategy: 'prefix', // 或 'prefix_except_default'
+    lazy: true,
+    langDir: 'lang/',  // 語言檔案目錄
+    detectBrowserLanguage: {
+      useCookie: true,
+      cookieKey: 'i18n_redirected',
+      redirectOn: 'root',  // root or all
+    },
+    vueI18n: {
+      fallbackLocale: 'zh-TW',
+    },
+  },
   // Axios module configuration: https://go.nuxtjs.dev/config-axios
   axios: {},
 
   // Build Configuration: https://go.nuxtjs.dev/config-build
   build: {
-    extend(config, { isDev, isClient }) {
-      config.resolve.alias['@'] = path.resolve(__dirname);
-      
-    }
   }
 }

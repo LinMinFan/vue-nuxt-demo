@@ -23,7 +23,7 @@ export default {
 
 <template>
     <div>
-        <h1>這是首頁</h1>
+        <h1>這是會員中心</h1>
     </div>
 </template>
 

@@ -1,5 +1,5 @@
 [
-    { "title": "繁體中文", "code": "zh-TW" },
-    { "title": "簡體中文", "code": "zh-CN" },
-    { "title": "English", "code": "en" }
+    { "code": "zh-TW", "iso": "zh-TW", "name": "繁體中文", "file": "zh-TW.js" },
+    { "code": "zh-CN", "iso": "zh-CN", "name": "简体中文", "file": "zh-CN.js" },
+    { "code": "en", "iso": "en-US", "name": "English", "file": "en.js" }
 ]
