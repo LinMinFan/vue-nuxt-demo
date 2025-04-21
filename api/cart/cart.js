@@ -1,0 +1,10 @@
+// api/cart/cart.js
+
+const cart = [
+    { id: 3, name: 'Apple Watch Serial 7', price: 800 , image: 'imgs/shop/thumbnail-3.jpg', quantity: 2 },
+    { id: 1, name: 'Macbook Pro 2022', price: 3200 , image: 'imgs/shop/thumbnail-1.jpg', quantity: 1 },
+]
+
+export default {
+    cart,
+};

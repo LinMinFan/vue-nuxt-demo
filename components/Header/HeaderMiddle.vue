@@ -1,4 +1,6 @@
 <script>
+import { cartApi } from '@/api/index.js';
+
 export default {
     name: 'HeaderMiddle',
     props: {
@@ -11,24 +13,34 @@ export default {
         return {
             selectedCategory: 'all',     // 綁定 select
             searchKeyword: '',        // 綁定 input
+            cartData: [],        // 購物車資料
         }
     },
     computed: {
         categories() {
             return this.$store.getters['head/head-middle/categories']
-        }
+        },
+        totalPrice() {
+            return this.cartData.reduce((total, item) => {
+                return total + (item.price * item.quantity)
+            }, 0)
+        },
     },
     mounted() {
         const vm = this
         document.getElementById('selectCategory').addEventListener('change', function (event) {
             vm.selectedCategory = event.target.value
         })
+        this.cartData = cartApi.cart
     },
     methods: {
         onSearch() {
             console.log('搜尋類別:', this.selectedCategory)
             console.log('關鍵字:', this.searchKeyword)
         },
+        removeItem(id) {
+            this.cartData = this.cartData.filter(item => item.id !== id);
+        }
     },
     watch: {
 
@@ -73,49 +85,33 @@ export default {
                             </nuxt-link>
                             <div class="cart-dropdown-wrap cart-dropdown-hm2">
                                 <ul>
-                                    <li>
+                                    <li v-for="item in cartData" :key="item.id">
                                         <div class="shopping-cart-img">
-                                            <a href="shop-product-right.html">
-                                                <img alt="wowy" src="/imgs/shop/thumbnail-3.jpg" />
-                                            </a>
+                                            <nuxt-link :to="`/${currentLang.code}/shop/${item.id}`">
+                                                <img alt="wowy" :src="item.image" />
+                                            </nuxt-link>
                                         </div>
                                         <div class="shopping-cart-title">
                                             <h4>
-                                                <a href="shop-product-right.html">Apple Watch Serial 7</a>
+                                                <nuxt-link :to="`/${currentLang.code}/shop/${item.id}`">
+                                                    {{ item.name }}
+                                                </nuxt-link>
                                             </h4>
                                             <h3>
-                                                <span>1 × </span> $800.00
+                                                <span>{{ item.quantity }} × </span> ${{ item.price*item.quantity }}
                                             </h3>
                                         </div>
-                                        <div class="shopping-cart-delete">
+                                        <div class="shopping-cart-delete" @click.prevent="removeItem(item.id)">
                                             <a href="#">
                                                 <i class="far fa-times"></i>
                                             </a>
-                                        </div>
-                                    </li>
-                                    <li>
-                                        <div class="shopping-cart-img">
-                                            <a href="shop-product-right.html">
-                                                <img alt="wowy" src="/imgs/shop/thumbnail-1.jpg" />
-                                            </a>
-                                        </div>
-                                        <div class="shopping-cart-title">
-                                            <h4>
-                                                <a href="shop-product-right.html">Macbook Pro 2022</a>
-                                            </h4>
-                                            <h3>
-                                                <span>1 × </span> $3200.00
-                                            </h3>
-                                        </div>
-                                        <div class="shopping-cart-delete">
-                                            <a href="#"><i class="far fa-times"></i></a>
                                         </div>
                                     </li>
                                 </ul>
                                 <div class="shopping-cart-footer">
                                     <div class="shopping-cart-total">
                                         <h4>
-                                            Total <span>$4000.00</span>
+                                            Total <span>$ {{ totalPrice }}</span>
                                         </h4>
                                     </div>
                                     <div class="shopping-cart-button">
@@ -141,6 +137,6 @@ export default {
     </div>
 </template>
 
-<style>
+<style scoped>
     
 </style>

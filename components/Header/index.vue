@@ -3,6 +3,14 @@
 export default {
     name: 'Header',
     props: {
+        currentLang: {
+            type: Object,
+            default: () => ({})
+        },
+        languages: {
+            type: Array,
+            default: () => ([])
+        },
         islogin: {
             type: Boolean,
             default: false
@@ -19,15 +27,6 @@ export default {
     },
     computed: {
         // 從 Vuex store 中獲取資料
-        currentLang() {
-            const code = this.$store.getters['head/head-top/currentLangCode']
-            const lang = this.$store.getters['head/head-top/languages']
-            return lang.find(l => l.code === code)
-        },
-        languages () {
-            const lang = this.$store.getters['head/head-top/languages']
-            return lang.filter(l => l.code !== this.currentLang.code)
-        },
         latestEvents() {
             return this.$store.getters['head/head-top/latestEvents']
         },
@@ -53,15 +52,19 @@ export default {
 <template>
     <header class="header-area header-height-2">
         <HeaderTop 
+        :currentLang="currentLang"
+        :languages="languages"
             :islogin="islogin"
             :logout="logout"
-            :currentLang="currentLang"
-            :languages="languages"
             :latestEvents="latestEvents"
             :discountPlan="discountPlan"
             :announcement="announcement"
         />
         <HeaderMiddle
+            :islogin="islogin"
+            :currentLang="currentLang"
+        />
+        <HeaderBottom
             :islogin="islogin"
             :currentLang="currentLang"
         />
