@@ -8,6 +8,10 @@ export default {
             type: Object,
             default: () => ({})
         },
+        categories: {
+            type: Array,
+            default: () => ([])
+        },
     },
     data() {
         return {
@@ -17,9 +21,6 @@ export default {
         }
     },
     computed: {
-        categories() {
-            return this.$store.getters['head/head-middle/categories']
-        },
         totalPrice() {
             return this.cartData.reduce((total, item) => {
                 return total + (item.price * item.quantity)
@@ -27,16 +28,15 @@ export default {
         },
     },
     mounted() {
-        const vm = this
-        document.getElementById('selectCategory').addEventListener('change', function (event) {
-            vm.selectedCategory = event.target.value
+        $('#selectCategory').on('select2:select', (e) => {
+            this.selectedCategory = e.params.data.id
         })
+
         this.cartData = cartApi.cart
     },
     methods: {
         onSearch() {
-            console.log('搜尋類別:', this.selectedCategory)
-            console.log('關鍵字:', this.searchKeyword)
+            console.log(`Searching for ${this.searchKeyword} in ${this.selectedCategory} category`);
         },
         removeItem(id) {
             this.cartData = this.cartData.filter(item => item.id !== id);

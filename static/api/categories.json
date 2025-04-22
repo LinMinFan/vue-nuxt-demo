@@ -1,9 +1,9 @@
 [
-    { "type": "all", "name": "全部分類" },
-    { "type": 1, "name": "女性服飾" },
-    { "type": 2, "name": "男性服飾" },
-    { "type": 3, "name": "行動裝置" },
-    { "type": 4, "name": "電腦週邊" },
-    { "type": 5, "name": "生活家電" }
+    { "type": "all", "name": "全部分類", "icon": "wowy-font-home" },
+    { "type": 1, "name": "女性服飾", "icon": "wowy-font-dress" },
+    { "type": 2, "name": "男性服飾", "icon": "wowy-font-tshirt" },
+    { "type": 3, "name": "行動裝置", "icon": "wowy-font-smartphone" },
+    { "type": 4, "name": "電腦週邊", "icon": "wowy-font-desktop" },
+    { "type": 5, "name": "生活家電", "icon": "wowy-font-cpu" }
 ]
   

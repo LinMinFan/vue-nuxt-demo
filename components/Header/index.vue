@@ -36,6 +36,9 @@ export default {
         announcement() {
             return this.$store.getters['head/head-top/announcement']
         },
+        categories() {
+            return this.$store.getters['head/head-middle/categories']
+        },
     },
     mounted() {
 
@@ -63,10 +66,12 @@ export default {
         <HeaderMiddle
             :islogin="islogin"
             :currentLang="currentLang"
+            :categories="categories"
         />
         <HeaderBottom
             :islogin="islogin"
             :currentLang="currentLang"
+            :categories="categories"
         />
     </header>
 </template>
