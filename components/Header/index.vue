@@ -1,4 +1,5 @@
 <script>
+import { cartApi } from '@/api/index.js';
 
 export default {
     name: 'Header',
@@ -11,6 +12,9 @@ export default {
             type: Array,
             default: () => ([])
         },
+        switchLanguage: {
+            type: Function,
+        },
         islogin: {
             type: Boolean,
             default: false
@@ -18,11 +22,26 @@ export default {
         logout: {
             type: Function,
         },
+        searchCategory: {
+            type: String,
+            default: 'all'
+        },
+        searchKeyword: {
+            type: String,
+            default: ''
+        },
+        onSearch: {
+            type: Function,
+        },
+        categories: {
+            type: Array,
+            default: () => ([])
+        },
     },
     data() {
 
         return {
-
+            cartData: [],        // 購物車資料
         }
     },
     computed: {
@@ -36,15 +55,19 @@ export default {
         announcement() {
             return this.$store.getters['head/head-top/announcement']
         },
-        categories() {
-            return this.$store.getters['head/head-middle/categories']
+        totalPrice() {
+            return this.cartData.reduce((total, item) => {
+                return total + (item.price * item.quantity)
+            }, 0)
         },
     },
     mounted() {
-
+        this.cartData = cartApi.cart
     },
     methods: {
-
+        removeItem(id) {
+            this.cartData = this.cartData.filter(item => item.id !== id);
+        },
     },
     watch: {
 
@@ -55,8 +78,9 @@ export default {
 <template>
     <header class="header-area header-height-2">
         <HeaderTop 
-        :currentLang="currentLang"
-        :languages="languages"
+            :currentLang="currentLang"
+            :languages="languages"
+            :switchLanguage="switchLanguage"
             :islogin="islogin"
             :logout="logout"
             :latestEvents="latestEvents"
@@ -65,13 +89,24 @@ export default {
         />
         <HeaderMiddle
             :islogin="islogin"
+            :searchCategory="searchCategory"
+            @update:searchCategory="$emit('update:searchCategory', $event)"
+            :searchKeyword="searchKeyword"
+            @update:searchKeyword="$emit('update:searchKeyword', $event)"
+            :onSearch="onSearch"
             :currentLang="currentLang"
             :categories="categories"
+            :cartData="cartData"
+            :totalPrice="totalPrice"
+            :removeItem="removeItem"
         />
         <HeaderBottom
             :islogin="islogin"
             :currentLang="currentLang"
             :categories="categories"
+            :cartData="cartData"
+            :totalPrice="totalPrice"
+            :removeItem="removeItem"
         />
     </header>
 </template>

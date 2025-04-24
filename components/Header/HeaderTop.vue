@@ -3,13 +3,6 @@
 export default {
     name: 'HeaderTop',
     props: {
-        islogin: {
-            type: Boolean,
-            default: false
-        },
-        logout: {
-            type: Function,
-        },
         currentLang: {
             type: Object,
             default: () => ({})
@@ -17,6 +10,16 @@ export default {
         languages: {
             type: Array,
             default: () => []
+        },
+        switchLanguage: {
+            type: Function,
+        },
+        islogin: {
+            type: Boolean,
+            default: false
+        },
+        logout: {
+            type: Function,
         },
         latestEvents: {
             type: Array,
@@ -42,10 +45,7 @@ export default {
 
     },
     methods: {
-        switchLanguage(code) {
-            this.$i18n.setLocale(code)
-            this.$store.dispatch('head/head-top/SET_CURRRENT_LANG_CODE', code)
-        },
+        
     },
     watch: {
 

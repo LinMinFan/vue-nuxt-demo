@@ -1,9 +1,24 @@
 <script>
-import { cartApi } from '@/api/index.js';
 
 export default {
     name: 'HeaderMiddle',
     props: {
+        islogin: {
+            type: Boolean,
+            default: false
+        },
+        searchCategory: {
+            type: String,
+            default: 'all'
+        },
+        searchKeyword: {
+            type: String,
+            default: ''
+        },
+        onSearch: {
+            type: Function,
+            default: () => {}
+        },
         currentLang: {
             type: Object,
             default: () => ({})
@@ -12,39 +27,45 @@ export default {
             type: Array,
             default: () => ([])
         },
+        cartData: {
+            type: Array,
+            default: () => ([])
+        },
+        totalPrice: {
+            type: Number,
+            default: 0
+        },
+        removeItem: {
+            type: Function,
+            default: () => {}
+        }
     },
     data() {
         return {
-            selectedCategory: 'all',     // 綁定 select
-            searchKeyword: '',        // 綁定 input
-            cartData: [],        // 購物車資料
+
         }
     },
     computed: {
-        totalPrice() {
-            return this.cartData.reduce((total, item) => {
-                return total + (item.price * item.quantity)
-            }, 0)
-        },
+        
     },
     mounted() {
         $('#selectCategory').on('select2:select', (e) => {
-            this.selectedCategory = e.params.data.id
+            this.$emit('update:searchCategory', e.params.data.id);
         })
-
-        this.cartData = cartApi.cart
+        $('#selectCategory').val(this.searchCategory).trigger('change');
     },
     methods: {
-        onSearch() {
-            console.log(`Searching for ${this.searchKeyword} in ${this.selectedCategory} category`);
-        },
-        removeItem(id) {
-            this.cartData = this.cartData.filter(item => item.id !== id);
-        }
+        
     },
     watch: {
-
+        // 當外部 props 變動，要同步更新 select2
+        searchCategory(newVal) {
+            $('#selectCategory').val(newVal).trigger('change');
+        }
     },
+    beforeDestroy() {
+        $('#selectCategory').off('select2:select').select2('destroy');
+    }
 }
 </script>
 
@@ -64,7 +85,11 @@ export default {
                                 {{ category.name }}
                             </option>
                         </select>
-                        <input type="text" v-model="searchKeyword" placeholder="查詢商品…" />
+                        <input type="text" 
+                            :value="searchKeyword"
+                            @input="$emit('update:searchKeyword', $event.target.value)"
+                            placeholder="查詢商品…" 
+                        />
                         <button type="submit">
                             <i class="far fa-search"></i>
                         </button>
@@ -81,7 +106,7 @@ export default {
                         <div class="header-action-icon-2">
                             <nuxt-link class="mini-cart-icon" :to="`/${currentLang.code}/cart`" >
                                 <img alt="wowy" src="/imgs/theme/icons/icon-cart.svg" />
-                                <span class="pro-count blue">2</span>
+                                <span class="pro-count blue">{{ cartData.length }}</span>
                             </nuxt-link>
                             <div class="cart-dropdown-wrap cart-dropdown-hm2">
                                 <ul>

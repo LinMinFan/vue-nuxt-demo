@@ -2,6 +2,10 @@
 export default {
     name: 'HeaderBottom',
     props: {
+        islogin: {
+            type: Boolean,
+            default: false
+        },
         currentLang: {
             type: Object,
             default: () => ({})
@@ -10,6 +14,18 @@ export default {
             type: Array,
             default: () => ([])
         },
+        cartData: {
+            type: Array,
+            default: () => ([])
+        },
+        totalPrice: {
+            type: Number,
+            default: 0
+        },
+        removeItem: {
+            type: Function,
+            default: () => {}
+        }
     },
 }
 </script>
@@ -19,9 +35,9 @@ export default {
         <div class="container">
             <div class="header-wrap header-space-between position-relative">
                 <div class="logo logo-width-1 d-block d-lg-none">
-                    <a href="index.html">
-                        <img src="assets/imgs/theme/logo-white.png" alt="logo" />
-                    </a>
+                    <nuxt-link :to="`/${currentLang.code}`">
+                        <img src="/imgs/theme/logo-white.png" alt="logo" />
+                    </nuxt-link>
                 </div>
                 <div class="main-categori-wrap d-none d-lg-block">
                     <a class="categori-button-active" href="#"> 
@@ -61,58 +77,62 @@ export default {
                 <div class="header-action-right d-block d-lg-none">
                     <div class="header-action-2">
                         <div class="header-action-icon-2">
-                            <a href="shop-wishlist.html">
-                                <img alt="wowy" src="assets/imgs/theme/icons/icon-heart-white.svg" />
+                            <nuxt-link :to="`/${currentLang.code}/member/wishlist`" class="mini-cart-icon">
+                                <img class="wowy" alt="wowy" src="/imgs/theme/icons/icon-heart-white.svg" />
                                 <span class="pro-count white">4</span>
-                            </a>
+                            </nuxt-link>
                         </div>
                         <div class="header-action-icon-2">
-                            <a class="mini-cart-icon" href="shop-cart.html">
-                                <img alt="wowy" src="assets/imgs/theme/icons/icon-cart-white.svg" />
-                                <span class="pro-count white">02</span>
-                            </a>
+                            <nuxt-link class="mini-cart-icon" :to="`/${currentLang.code}/cart`" >
+                                <img alt="wowy" src="/imgs/theme/icons/icon-cart-white.svg" />
+                                <span class="pro-count white">{{ cartData.length }}</span>
+                            </nuxt-link>
                             <div class="cart-dropdown-wrap cart-dropdown-hm2">
                                 <ul>
-                                    <li>
+                                    <li v-for="item in cartData" :key="item.id">
                                         <div class="shopping-cart-img">
-                                            <a href="shop-product-right.html"><img alt="wowy" src="assets/imgs/shop/thumbnail-3.jpg" /></a>
+                                            <nuxt-link :to="`/${currentLang.code}/shop/${item.id}`">
+                                                <img alt="wowy" :src="item.image" />
+                                            </nuxt-link>
                                         </div>
                                         <div class="shopping-cart-title">
-                                            <h4><a href="shop-product-right.html">Apple Watch Serial 7</a></h4>
-                                            <h3><span>1 × </span>$800.00</h3>
+                                            <h4>
+                                                <nuxt-link :to="`/${currentLang.code}/shop/${item.id}`">
+                                                    {{ item.name }}
+                                                </nuxt-link>
+                                            </h4>
+                                            <h3>
+                                                <span>{{ item.quantity }} × </span> ${{ item.price*item.quantity }}
+                                            </h3>
                                         </div>
-                                        <div class="shopping-cart-delete">
-                                            <a href="#"><i class="far fa-times"></i></a>
-                                        </div>
-                                    </li>
-                                    <li>
-                                        <div class="shopping-cart-img">
-                                            <a href="shop-product-right.html"><img alt="wowy" src="assets/imgs/shop/thumbnail-4.jpg" /></a>
-                                        </div>
-                                        <div class="shopping-cart-title">
-                                            <h4><a href="shop-product-right.html">Macbook Pro 2022</a></h4>
-                                            <h3><span>1 × </span>$3500.00</h3>
-                                        </div>
-                                        <div class="shopping-cart-delete">
-                                            <a href="#"><i class="far fa-times"></i></a>
+                                        <div class="shopping-cart-delete" @click.prevent="removeItem(item.id)">
+                                            <a href="#">
+                                                <i class="far fa-times"></i>
+                                            </a>
                                         </div>
                                     </li>
                                 </ul>
                                 <div class="shopping-cart-footer">
                                     <div class="shopping-cart-total">
-                                        <h4>Total <span>$383.00</span></h4>
+                                        <h4>
+                                            Total <span>$ {{ totalPrice }}</span>
+                                        </h4>
                                     </div>
                                     <div class="shopping-cart-button">
-                                        <a href="shop-cart.html">View cart</a>
-                                        <a href="shop-checkout.html">Checkout</a>
+                                        <nuxt-link :to="`/${currentLang.code}/cart`">
+                                            查看購物車
+                                        </nuxt-link>
+                                        <nuxt-link :to="`/${currentLang.code}/cart/checkout`">
+                                            確認結帳
+                                        </nuxt-link>
                                     </div>
                                 </div>
                             </div>
                         </div>
                         <div class="header-action-icon-2">
-                            <a href="page-login-register.html">
-                                <img alt="wowy" src="assets/imgs/theme/icons/icon-user-white.svg" />
-                            </a>
+                            <nuxt-link :to="`/${currentLang.code}/member`">
+                                <img alt="wowy" src="/imgs/theme/icons/icon-user-white.svg" />
+                            </nuxt-link>
                         </div>
                         <div class="header-action-icon-2 d-block d-lg-none">
                             <div class="burger-icon burger-icon-white">
