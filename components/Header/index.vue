@@ -3,17 +3,6 @@
 export default {
     name: 'Header',
     props: {
-        currentLang: {
-            type: Object,
-            default: () => ({})
-        },
-        languages: {
-            type: Array,
-            default: () => ([])
-        },
-        switchLanguage: {
-            type: Function,
-        },
         islogin: {
             type: Boolean,
             default: false
@@ -29,13 +18,6 @@ export default {
             type: String,
             default: ''
         },
-        onSearch: {
-            type: Function,
-        },
-        categories: {
-            type: Array,
-            default: () => ([])
-        },
     },
     data() {
         return {
@@ -43,16 +25,6 @@ export default {
         }
     },
     computed: {
-        // 從 Vuex store 中獲取資料
-        latestEvents() {
-            return this.$store.getters['head/head-top/latestEvents']
-        },
-        discountPlan() {
-            return this.$store.getters['head/head-top/discountPlan']
-        },
-        announcement() {
-            return this.$store.getters['head/head-top/announcement']
-        },
         cartData() {
             return this.$store.getters['cart/cart/cart']
         },
@@ -79,14 +51,8 @@ export default {
 <template>
     <header class="header-area header-height-2">
         <HeaderTop 
-            :currentLang="currentLang"
-            :languages="languages"
-            :switchLanguage="switchLanguage"
             :islogin="islogin"
             :logout="logout"
-            :latestEvents="latestEvents"
-            :discountPlan="discountPlan"
-            :announcement="announcement"
         />
         <HeaderMiddle
             :islogin="islogin"
@@ -94,17 +60,12 @@ export default {
             @update:searchCategory="$emit('update:searchCategory', $event)"
             :searchKeyword="searchKeyword"
             @update:searchKeyword="$emit('update:searchKeyword', $event)"
-            :onSearch="onSearch"
-            :currentLang="currentLang"
-            :categories="categories"
             :cartData="cartData"
             :totalPrice="totalPrice"
             :removeItem="removeItem"
         />
         <HeaderBottom
             :islogin="islogin"
-            :currentLang="currentLang"
-            :categories="categories"
             :cartData="cartData"
             :totalPrice="totalPrice"
             :removeItem="removeItem"

@@ -1,4 +1,5 @@
 <script>
+import { onSearch } from '@/helpers/tools'
 
 export default {
     name: 'HeaderMiddle',
@@ -14,18 +15,6 @@ export default {
         searchKeyword: {
             type: String,
             default: ''
-        },
-        onSearch: {
-            type: Function,
-            default: () => {}
-        },
-        currentLang: {
-            type: Object,
-            default: () => ({})
-        },
-        categories: {
-            type: Array,
-            default: () => ([])
         },
         cartData: {
             type: Array,
@@ -46,25 +35,68 @@ export default {
         }
     },
     computed: {
-        
+        currentLang() {
+            const code = this.$store.getters['head/head-top/currentLangCode']
+            const lang = this.$store.getters['head/head-top/languages']
+            return lang.find(l => l.code === code)
+        },
+        categories() {
+            return this.$store.getters['head/head-middle/categories']
+        },
     },
     mounted() {
-        $('#selectCategory').on('select2:select', (e) => {
-            this.$emit('update:searchCategory', e.params.data.id);
-        })
-        $('#selectCategory').val(this.searchCategory).trigger('change');
+        this.waitForSelect2Ready().then(() => {
+            this.initSelect2();
+        });
     },
     methods: {
-        
+        waitForSelect2Ready() {
+            return new Promise((resolve) => {
+                const check = () => {
+                    if (typeof $(this.$refs.selectCategory).select2 === 'function') {
+                        console.log('✅ Select2 is ready!');
+                        resolve();
+                    } else {
+                        console.log('⏳ Waiting for Select2...');
+                        setTimeout(check, 250); // 每 250ms 檢查一次
+                    }
+                };
+                check();
+            });
+        },
+        initSelect2() {
+            this.$nextTick(() => {
+                const select = $(this.$refs.selectCategory);
+                select.select2();
+                select.on('select2:select', (e) => {
+                    this.$emit('update:searchCategory', e.params.data.id);
+                });
+                select.val(this.searchCategory).trigger('change');
+            });
+        },
+        destroySelect2() {
+            if (this.$refs.selectCategory) {
+                $(this.$refs.selectCategory).off('select2:select').select2('destroy');
+            }
+        },
+        handleSearch() {
+            onSearch(this.searchCategory, this.searchKeyword)
+        },
     },
     watch: {
-        // 當外部 props 變動，要同步更新 select2
+        categories: {
+            handler() {
+                this.destroySelect2();
+                this.initSelect2();
+            },
+            deep: true,
+        },
         searchCategory(newVal) {
-            $('#selectCategory').val(newVal).trigger('change');
+            $(this.$refs.selectCategory).val(newVal).trigger('change');
         }
     },
     beforeDestroy() {
-        $('#selectCategory').off('select2:select').select2('destroy');
+        this.destroySelect2();
     }
 }
 </script>
@@ -79,8 +111,8 @@ export default {
                     </nuxt-link>
                 </div>
                 <div class="search-style-2">
-                    <form action="#" @submit.prevent="onSearch">
-                        <select class="select-active" id="selectCategory">
+                    <form action="#" @submit.prevent="handleSearch">
+                        <select class="select-active" ref="selectCategory" id="selectCategory">
                             <option v-for="category in categories" :key="category.type" :value="category.type">
                                 {{ category.name }}
                             </option>

@@ -1,19 +1,9 @@
 <script>
+import { switchLanguage } from '@/helpers/tools'
 
 export default {
     name: 'HeaderTop',
     props: {
-        currentLang: {
-            type: Object,
-            default: () => ({})
-        },
-        languages: {
-            type: Array,
-            default: () => []
-        },
-        switchLanguage: {
-            type: Function,
-        },
         islogin: {
             type: Boolean,
             default: false
@@ -39,13 +29,32 @@ export default {
         }
     },
     computed: {
-        
+        currentLang() {
+            const code = this.$store.getters['head/head-top/currentLangCode']
+            const lang = this.$store.getters['head/head-top/languages']
+            return lang.find(l => l.code === code)
+        },
+        languages() {
+            const lang = this.$store.getters['head/head-top/languages']
+            return lang.filter(l => l.code !== this.currentLang.code)
+        },
+        latestEvents() {
+            return this.$store.getters['head/head-top/latestEvents']
+        },
+        discountPlan() {
+            return this.$store.getters['head/head-top/discountPlan']
+        },
+        announcement() {
+            return this.$store.getters['head/head-top/announcement']
+        },
     },
     mounted() {
 
     },
     methods: {
-        
+        switchLang(code) {
+            switchLanguage(code, { $i18n: this.$i18n, $store: this.$store });
+        }
     },
     watch: {
 
@@ -96,7 +105,7 @@ export default {
                                 </a>
                                 <ul class="language-dropdown">
                                     <li v-for="lang in languages" :key="lang.code">
-                                        <a href="#" @click.prevent="switchLanguage(lang.code)" >
+                                        <a href="#" @click.prevent="switchLang(lang.code)" >
                                             {{ lang.name }}
                                         </a>
                                     </li>

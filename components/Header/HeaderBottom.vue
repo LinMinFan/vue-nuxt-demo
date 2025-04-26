@@ -6,14 +6,6 @@ export default {
             type: Boolean,
             default: false
         },
-        currentLang: {
-            type: Object,
-            default: () => ({})
-        },
-        categories: {
-            type: Array,
-            default: () => ([])
-        },
         cartData: {
             type: Array,
             default: () => ([])
@@ -27,6 +19,16 @@ export default {
             default: () => {}
         }
     },
+    computed: {
+        currentLang() {
+            const code = this.$store.getters['head/head-top/currentLangCode']
+            const lang = this.$store.getters['head/head-top/languages']
+            return lang.find(l => l.code === code)
+        },
+        categories() {
+            return this.$store.getters['head/head-middle/categories']
+        },
+    }
 }
 </script>
 

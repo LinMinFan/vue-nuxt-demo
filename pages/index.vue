@@ -1,4 +1,5 @@
 <script>
+import debounce from 'lodash/debounce';
 
 export default {
     layout: 'default',
@@ -66,20 +67,14 @@ export default {
                 });
             }
         },
-        debounceInitSlider() {
-            // 每次呼叫 debounceInitSlider，都清掉之前的 timer
-            if (this.initSliderTimer) {
-                clearTimeout(this.initSliderTimer);
-            }
-
-            // 重新設定一個新的 timer
-            this.initSliderTimer = setTimeout(() => {
-                this.initSlider();
-                this.initSliderTimer = null; // 執行完清除
-            }, 500); // 500ms 內只會執行一次
-        },
+        debounceInitSlider: debounce(function() {
+            this.initSlider();
+        }, 500)
     },
     computed: {
+        categories() {
+            return this.$store.getters['head/head-middle/categories']
+        },
         sliders() {
             return this.$store.getters['home/slider/sliders'];
         },
@@ -191,49 +186,49 @@ export default {
                         <div class="carausel-6-columns" id="carausel-6-columns">
                             <div class="card-1 border-radius-10 hover-up p-30">
                                 <figure class="mb-30 img-hover-scale overflow-hidden">
-                                    <img src="assets/imgs/shop/category-thumb-1.jpg" alt="" />
+                                    <img src="/imgs/shop/category-thumb-1.jpg" alt="" />
                                 </figure>
                                 <h5><a href="shop-grid-right.html">Men's Fashion</a></h5>
                             </div>
                             <div class="card-1 border-radius-10 hover-up p-30">
                                 <figure class="mb-30 img-hover-scale overflow-hidden">
-                                    <img src="assets/imgs/shop/category-thumb-2.jpg" alt="" />
+                                    <img src="/imgs/shop/category-thumb-2.jpg" alt="" />
                                 </figure>
                                 <h5><a href="shop-grid-right.html">Women's Fashion</a></h5>
                             </div>
                             <div class="card-1 border-radius-10 hover-up p-30">
                                 <figure class="mb-30 img-hover-scale overflow-hidden">
-                                    <img src="assets/imgs/shop/category-thumb-3.jpg" alt="" />
+                                    <img src="/imgs/shop/category-thumb-3.jpg" alt="" />
                                 </figure>
                                 <h5><a href="shop-grid-right.html">Watches</a></h5>
                             </div>
                             <div class="card-1 border-radius-10 hover-up p-30">
                                 <figure class="mb-30 img-hover-scale overflow-hidden">
-                                    <img src="assets/imgs/shop/category-thumb-4.jpg" alt="" />
+                                    <img src="/imgs/shop/category-thumb-4.jpg" alt="" />
                                 </figure>
                                 <h5><a href="shop-grid-right.html">Bag & Shoes</a></h5>
                             </div>
                             <div class="card-1 border-radius-10 hover-up p-30">
                                 <figure class="mb-30 img-hover-scale overflow-hidden">
-                                    <img src="assets/imgs/shop/category-thumb-5.jpg" alt="" />
+                                    <img src="/imgs/shop/category-thumb-5.jpg" alt="" />
                                 </figure>
                                 <h5><a href="shop-grid-right.html">Phone</a></h5>
                             </div>
                             <div class="card-1 border-radius-10 hover-up p-30">
                                 <figure class="mb-30 img-hover-scale overflow-hidden">
-                                    <img src="assets/imgs/shop/category-thumb-6.jpg" alt="" />
+                                    <img src="/imgs/shop/category-thumb-6.jpg" alt="" />
                                 </figure>
                                 <h5><a href="shop-grid-right.html">Computers</a></h5>
                             </div>
                             <div class="card-1 border-radius-10 hover-up p-30">
                                 <figure class="mb-30 img-hover-scale overflow-hidden">
-                                    <img src="assets/imgs/shop/category-thumb-7.jpg" alt="" />
+                                    <img src="/imgs/shop/category-thumb-7.jpg" alt="" />
                                 </figure>
                                 <h5><a href="shop-grid-right.html">Laptop</a></h5>
                             </div>
                             <div class="card-1 border-radius-10 hover-up p-30">
                                 <figure class="mb-30 img-hover-scale overflow-hidden">
-                                    <img src="assets/imgs/shop/category-thumb-8.jpg" alt="" />
+                                    <img src="/imgs/shop/category-thumb-8.jpg" alt="" />
                                 </figure>
                                 <h5><a href="shop-grid-right.html">Furniture</a></h5>
                             </div>

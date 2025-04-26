@@ -1,18 +1,9 @@
 <script>
+import { switchLanguage, onSearch } from '@/helpers/tools'
+
 export default {
     name: 'HeaderMobile',
     props: {
-        currentLang: {
-            type: Object,
-            default: () => ({})
-        },
-        languages: {
-            type: Array,
-            default: () => ([])
-        },
-        switchLanguage: {
-            type: Function,
-        },
         islogin: {
             type: Boolean,
             default: false
@@ -20,19 +11,37 @@ export default {
         logout: {
             type: Function,
         },
+        searchCategory: {
+            type: String,
+            default: 'all'
+        },
         searchKeyword: {
             type: String,
             default: ''
         },
-        onSearch: {
-            type: Function,
-            default: () => {}
+    },
+    computed: {
+        currentLang() {
+            const code = this.$store.getters['head/head-top/currentLangCode']
+            const lang = this.$store.getters['head/head-top/languages']
+            return lang.find(l => l.code === code)
         },
-        categories: {
-            type: Array,
-            default: () => ([])
+        languages() {
+            const lang = this.$store.getters['head/head-top/languages']
+            return lang.filter(l => l.code !== this.currentLang.code)
+        },
+        categories() {
+            return this.$store.getters['head/head-middle/categories']
         },
     },
+    methods: {
+        switchLang(code) {
+            switchLanguage(code, { $i18n: this.$i18n, $store: this.$store });
+        },
+        handleSearch() {
+            onSearch(this.searchCategory, this.searchKeyword)
+        },
+    }
 }
 </script>
 
@@ -52,9 +61,9 @@ export default {
                     </button>
                 </div>
             </div>
-            <div class="mobile-header-content-area" @submit.prevent="onSearch">
+            <div class="mobile-header-content-area">
                 <div class="mobile-search search-style-3 mobile-header-border">
-                    <form action="#" @submit.prevent="onSearch">
+                    <form action="#" @submit.prevent="handleSearch">
                         <input type="text" 
                             :value="searchKeyword"
                             @input="$emit('update:searchKeyword', $event.target.value)"
@@ -90,7 +99,7 @@ export default {
                         <div class="lang-curr-dropdown lang-dropdown-active">
                             <ul>
                                 <li v-for="lang in languages" :key="lang.code">
-                                    <a href="#" @click.prevent="switchLanguage(lang.code)" >
+                                    <a href="#" @click.prevent="switchLang(lang.code)" >
                                         {{ lang.name }}
                                     </a>
                                 </li>
