@@ -6,4 +6,12 @@ export default {
     show_more: 'Show More',
     home: 'Home',
     shop: 'Shop',
+    free_shipping: 'Free Shipping',
+    free_shippiing_condition: 'Free shipping on purchases over a certain amount',
+    free_returns: 'Free Returns',
+    free_returns_condition: 'Free returns within 7 days',
+    member_gift: 'Member Gift',
+    cost_points: 'Points for purchases',
+    support_center: 'Support Center',
+    service_time: 'Service Time: Monday to Friday 09:00-18:00',
 }

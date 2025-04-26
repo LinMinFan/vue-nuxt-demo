@@ -1,0 +1,32 @@
+[
+    {
+        "id": 1,
+        "text_h4": "h4 標題",
+        "text_h2": "h2 標題",
+        "text_h1": "h1 標題",
+        "text_p": "p 文字內容",
+        "url": "shop", 
+        "text_url": "前往購買",
+        "img": "/imgs/slider/slider-1.png"
+    },
+    {
+        "id": 2,
+        "text_h4": "h4 標題",
+        "text_h2": "h2 標題",
+        "text_h1": "h1 標題",
+        "text_p": "p 文字內容",
+        "url": "shop",
+        "text_url": "前往購買",
+        "img": "/imgs/slider/slider-2.png"
+    },
+    {
+        "id": 3,
+        "text_h4": "h4 標題",
+        "text_h2": "h2 標題",
+        "text_h1": "h1 標題",
+        "text_p": "p 文字內容",
+        "url": "shop",
+        "text_url": "前往購買",
+        "img": "/imgs/slider/slider-3.png"
+    }
+]

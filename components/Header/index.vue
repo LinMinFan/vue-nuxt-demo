@@ -1,5 +1,4 @@
 <script>
-import { cartApi } from '@/api/index.js';
 
 export default {
     name: 'Header',
@@ -39,9 +38,8 @@ export default {
         },
     },
     data() {
-
         return {
-            cartData: [],        // 購物車資料
+            
         }
     },
     computed: {
@@ -55,6 +53,9 @@ export default {
         announcement() {
             return this.$store.getters['head/head-top/announcement']
         },
+        cartData() {
+            return this.$store.getters['cart/cart/cart']
+        },
         totalPrice() {
             return this.cartData.reduce((total, item) => {
                 return total + (item.price * item.quantity)
@@ -62,7 +63,7 @@ export default {
         },
     },
     mounted() {
-        this.cartData = cartApi.cart
+
     },
     methods: {
         removeItem(id) {
