@@ -14,4 +14,16 @@ export default {
     cost_points: '消費回饋點數',
     support_center: '客戶服務中心',
     service_time: '服務時間：週一至週五 09:00-18:00',
+    categories: '',
+    popular_categories: '熱門分類',
+    products_tab: {
+        featured: '精選商品',
+        popular: '熱門商品',
+        new_added: '最新上架',
+    },
+    quick_view: '快速預覽',
+    add_to_wishlist: '加入收藏',
+    compare: '比較商品',
+    add_to_cart: '加入購物車',
+    featured_brands: "推薦品牌",
 }

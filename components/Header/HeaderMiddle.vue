@@ -53,26 +53,37 @@ export default {
         waitForSelect2Ready() {
             return new Promise((resolve) => {
                 const check = () => {
-                    if (typeof $(this.$refs.selectCategory).select2 === 'function') {
-                        console.log('✅ Select2 is ready!');
+                    if (this.$refs.selectCategory && typeof $(this.$refs.selectCategory).select2 === 'function') {
+                        console.log(`✅ Select2 is ready`);
                         resolve();
                     } else {
-                        console.log('⏳ Waiting for Select2...');
-                        setTimeout(check, 250); // 每 250ms 檢查一次
+                        console.log(`⏳ Waiting for Select2...`);
+                        setTimeout(check, 250);
                     }
                 };
                 check();
             });
         },
         initSelect2() {
-            this.$nextTick(() => {
-                const select = $(this.$refs.selectCategory);
-                select.select2();
-                select.on('select2:select', (e) => {
-                    this.$emit('update:searchCategory', e.params.data.id);
+            if (process.client) {
+                this.$nextTick(() => {
+                    try {
+                        const selectElement = $(this.$refs.selectCategory);
+                        if (selectElement) {
+                            selectElement.select2( {
+                                width: '50%',
+                                allowClear: false,
+                            });
+                            selectElement.on('select2:select', (e) => {
+                                this.$emit('update:searchCategory', e.params.data.id);
+                            });
+                            selectElement.val(this.searchCategory).trigger('change');
+                        }
+                    } catch (e) {
+                        console.error('select2 initialization error:', e);
+                    }
                 });
-                select.val(this.searchCategory).trigger('change');
-            });
+            }
         },
         destroySelect2() {
             if (this.$refs.selectCategory) {

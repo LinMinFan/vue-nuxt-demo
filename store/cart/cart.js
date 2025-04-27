@@ -21,7 +21,7 @@ export default {
         },
 
         // 單獨加載數據（可根據需要調用）
-        async fetchSliders({ commit }) {
+        async fetchCart({ commit }) {
             try {
                 const response = await cartApi.getCart();
                 commit('SET_CART', response.data);

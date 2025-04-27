@@ -14,4 +14,16 @@ export default {
     cost_points: 'Points for purchases',
     support_center: 'Support Center',
     service_time: 'Service Time: Monday to Friday 09:00-18:00',
+    categories: 'Categories',
+    popular_categories: 'Popular',
+    products_tab: {
+        featured: 'Featured',
+        popular: 'Popular',
+        new_added: 'New Added',
+    },
+    quick_view: 'Quick view',
+    add_to_wishlist: 'Add To Wishlist',
+    compare: 'Compare',
+    add_to_cart: 'Add To Cart',
+    featured_brands: "Featured Brands",
 }

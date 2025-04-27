@@ -11,18 +11,6 @@ export default {
         logout: {
             type: Function,
         },
-        latestEvents: {
-            type: Array,
-            default: () => []
-        },
-        discountPlan: {
-            type: Array,
-            default: () => []
-        },
-        announcement: {
-            type: Array,
-            default: () => []
-        },
     },
     data() {
         return {

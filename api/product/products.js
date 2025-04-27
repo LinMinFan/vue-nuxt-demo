@@ -6,16 +6,9 @@ const url = axios.create({
 });
 
 const getProducts = () => {
-    return url.get('cart.json');
+    return url.get('products.json');
 };
-
-const productDetails = (id) => {
-    const parsedId = parseInt(id);
-    if (isNaN(parsedId)) return undefined;
-    return products.find(item => item.id === parsedId);
-}
 
 export default {
     getProducts,
-    productDetails
 };
