@@ -2,8 +2,12 @@
 
 export default {
     layout: 'default',
-    async asyncData({store, $axios}) {
+    async asyncData({ params, store, $axios }) {
+        const { id } = params
 
+        return {
+            id,
+        }
     },
     head() {
 
@@ -23,7 +27,7 @@ export default {
 
 <template>
     <div>
-        <h1>這是賣場所有類別</h1>
+        <h1>這是商品 {{ id }}</h1>
     </div>
 </template>
 

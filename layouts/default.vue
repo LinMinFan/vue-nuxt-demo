@@ -37,6 +37,7 @@ export default {
             <Nuxt />
         </main>
         <Footer />
+        <Preloader />
     </div>
 </template>
 

@@ -27,7 +27,7 @@ export default {
 
 <template>
     <div>
-        <h1>這是商品 {{ id }}</h1>
+        <h1>這是單一類別 {{ id }}</h1>
     </div>
 </template>
 

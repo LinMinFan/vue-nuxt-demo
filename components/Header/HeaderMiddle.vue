@@ -155,13 +155,13 @@ export default {
                                 <ul>
                                     <li v-for="item in cartData" :key="item.id">
                                         <div class="shopping-cart-img">
-                                            <nuxt-link :to="`/${currentLang.code}/shop/${item.id}`">
+                                            <nuxt-link :to="`/${currentLang.code}/product/${item.id}`">
                                                 <img alt="wowy" :src="item.image" />
                                             </nuxt-link>
                                         </div>
                                         <div class="shopping-cart-title">
                                             <h4>
-                                                <nuxt-link :to="`/${currentLang.code}/shop/${item.id}`">
+                                                <nuxt-link :to="`/${currentLang.code}/product/${item.id}`">
                                                     {{ item.name }}
                                                 </nuxt-link>
                                             </h4>

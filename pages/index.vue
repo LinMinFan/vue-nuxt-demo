@@ -30,13 +30,29 @@ export default {
                 prevArrow: '<span class="slider-btn slider-prev slick-arrow"><i class="far fa-chevron-left"></i></span>',
                 nextArrow: '<span class="slider-btn slider-next slick-arrow"><i class="far fa-chevron-right"></i></span>',
             },
-            carouselOptions: {
+            carouseOptions: {
                 infinite: true,
                 slidesToShow: 6, // 初始顯示6個
                 slidesToScroll: 1, // 每次滑動6個（也可以改成1，看你要的感覺）
                 arrows: true, // 顯示左右箭頭
                 autoplay: false, // 不自動輪播
                 appendArrows: '.categories-carausel-arrow',
+                prevArrow: '<span class="slider-btn slider-prev slick-arrow" style=""><i class="far fa-chevron-left"></i></span>',
+                nextArrow: '<span class="slider-btn slider-next slick-arrow" style=""><i class="far fa-chevron-right"></i></span>',
+                responsive: [
+                    { breakpoint: 1200, settings: { slidesToShow: 6 } },
+                    { breakpoint: 992,  settings: { slidesToShow: 6 } },
+                    { breakpoint: 768,  settings: { slidesToShow: 4 } },
+                    { breakpoint: 480,  settings: { slidesToShow: 2 } }
+                ]
+            },
+            brandOptions: {
+                infinite: true,
+                slidesToShow: 6, // 初始顯示6個
+                slidesToScroll: 1, // 每次滑動6個（也可以改成1，看你要的感覺）
+                arrows: true, // 顯示左右箭頭
+                autoplay: false, // 不自動輪播
+                appendArrows: '.categories-brand-arrow',
                 prevArrow: '<span class="slider-btn slider-prev slick-arrow" style=""><i class="far fa-chevron-left"></i></span>',
                 nextArrow: '<span class="slider-btn slider-next slick-arrow" style=""><i class="far fa-chevron-right"></i></span>',
                 responsive: [
@@ -116,7 +132,7 @@ export default {
                                 }
                             
                                 // 創建新的選項對象，避免修改原始對象
-                                const options = this.carouselOptions;
+                                const options = this.carouseOptions;
 
                                 // 重新初始化
                                 $(carouselElement).slick(options);
@@ -130,6 +146,47 @@ export default {
         },
         debounceInitCategoriesCarousel: debounce(function() {
             this.initCategoriesCarousel();
+        }, 500),
+        waitForBrandCarouselCarouselReady() {
+            return new Promise((resolve) => {
+                const check = () => {
+                    if (this.$refs.brandCarousel && typeof $(this.$refs.brandCarousel).slick === 'function') {
+                        console.log(`✅ brandCarousel is ready`);
+                        resolve();
+                    } else {
+                        console.log(`⏳ Waiting for brandCarousel...`);
+                        setTimeout(check, 250);
+                    }
+                };
+                check();
+            });
+        },
+        initBrandCarouselCarousel() {
+            if (process.client) {
+                this.$nextTick(() => {
+                    try {
+                        const brandElement = this.$refs.brandCarousel;
+                        if (brandElement && $(brandElement).length) {
+                                // 如果已經初始化，先銷毀
+                                if ($(brandElement).hasClass('slick-initialized')) {
+                                    $(brandElement).slick('unslick');
+                                }
+                            
+                                // 創建新的選項對象，避免修改原始對象
+                                const options = this.brandOptions;
+
+                                // 重新初始化
+                                $(brandElement).slick(options);
+                                console.log('brand carousel initialized');
+                        }
+                    } catch (e) {
+                        console.error('brand carousel initialization error:', e);
+                    }
+                });
+            }
+        },
+        debounceInitBrandCarouselCarousel: debounce(function() {
+            this.initBrandCarouselCarousel();
         }, 500)
     },
     computed: {
@@ -170,6 +227,7 @@ export default {
             this.$nextTick(() => {
                 this.debounceInitSlider();
                 this.debounceInitCategoriesCarousel();
+                this.debounceInitBrandCarouselCarousel();
             });
         }
     },
@@ -179,6 +237,9 @@ export default {
         });
         this.waitForCategoriesCarouselReady().then(() => {
             this.initCategoriesCarousel();
+        });
+        this.waitForBrandCarouselCarouselReady().then(() => {
+            this.initBrandCarouselCarousel();
         });
     }
 }
@@ -283,7 +344,7 @@ export default {
                                 <img :src="category.img" alt="" />
                             </figure>
                             <h5>
-                                <nuxt-link :to="`/${currentLang.code}/${category.type}`">
+                                <nuxt-link :to="`/${currentLang.code}/shop/${category.type}`">
                                     {{ category.name }}
                                 </nuxt-link>
                             </h5>
@@ -319,7 +380,7 @@ export default {
                                 <div class="product-cart-wrap mb-30">
                                     <div class="product-img-action-wrap">
                                         <div class="product-img product-img-zoom">
-                                            <nuxt-link :to="`/${currentLang.code}/shop/${item.id}`">
+                                            <nuxt-link :to="`/${currentLang.code}/product/${item.id}`">
                                                 <img class="default-img" :src="item.default_img" alt="" />
                                                 <img class="hover-img" :src="item.hover_img" alt="" />
                                             </nuxt-link>
@@ -341,12 +402,12 @@ export default {
                                     </div>
                                     <div class="product-content-wrap">
                                         <div class="product-category">
-                                            <nuxt-link :to="`/${currentLang.code}/shop`">
+                                            <nuxt-link :to="`/${currentLang.code}/shop/${item.category}`">
                                                 {{ categoryMap[item.category] }}
                                             </nuxt-link>
                                         </div>
                                         <h2>
-                                            <nuxt-link :to="`/${currentLang.code}/shop/${item.id}`">
+                                            <nuxt-link :to="`/${currentLang.code}/product/${item.id}`">
                                                 {{ item.name }}
                                             </nuxt-link>
                                         </h2>
@@ -372,7 +433,7 @@ export default {
                                 <div class="product-cart-wrap mb-30">
                                     <div class="product-img-action-wrap">
                                         <div class="product-img product-img-zoom">
-                                            <nuxt-link :to="`/${currentLang.code}/shop/${item.id}`">
+                                            <nuxt-link :to="`/${currentLang.code}/product/${item.id}`">
                                                 <img class="default-img" :src="item.default_img" alt="" />
                                                 <img class="hover-img" :src="item.hover_img" alt="" />
                                             </nuxt-link>
@@ -394,12 +455,12 @@ export default {
                                     </div>
                                     <div class="product-content-wrap">
                                         <div class="product-category">
-                                            <nuxt-link :to="`/${currentLang.code}/shop`">
+                                            <nuxt-link :to="`/${currentLang.code}/shop/${item.category}`">
                                                 {{ categoryMap[item.category] }}
                                             </nuxt-link>
                                         </div>
                                         <h2>
-                                            <nuxt-link :to="`/${currentLang.code}/shop/${item.id}`">
+                                            <nuxt-link :to="`/${currentLang.code}/product/${item.id}`">
                                                 {{ item.name }}
                                             </nuxt-link>
                                         </h2>
@@ -425,7 +486,7 @@ export default {
                                 <div class="product-cart-wrap mb-30">
                                     <div class="product-img-action-wrap">
                                         <div class="product-img product-img-zoom">
-                                            <nuxt-link :to="`/${currentLang.code}/shop/${item.id}`">
+                                            <nuxt-link :to="`/${currentLang.code}/product/${item.id}`">
                                                 <img class="default-img" :src="item.default_img" alt="" />
                                                 <img class="hover-img" :src="item.hover_img" alt="" />
                                             </nuxt-link>
@@ -447,12 +508,12 @@ export default {
                                     </div>
                                     <div class="product-content-wrap">
                                         <div class="product-category">
-                                            <nuxt-link :to="`/${currentLang.code}/shop`">
+                                            <nuxt-link :to="`/${currentLang.code}/shop/${item.category}`">
                                                 {{ categoryMap[item.category] }}
                                             </nuxt-link>
                                         </div>
                                         <h2>
-                                            <nuxt-link :to="`/${currentLang.code}/shop/${item.id}`">
+                                            <nuxt-link :to="`/${currentLang.code}/product/${item.id}`">
                                                 {{ item.name }}
                                             </nuxt-link>
                                         </h2>
@@ -480,8 +541,8 @@ export default {
             <div class="container">
                 <h3 class="section-title style-1 mb-30 wow fadeIn animated">{{ $t('featured_brands') }}</h3>
                 <div class="carausel-6-columns-cover arrow-center position-relative wow fadeIn animated">
-                    <div class="slider-arrow slider-arrow-3 carausel-6-columns-arrow" id="carausel-6-columns-3-arrows"></div>
-                    <div class="carausel-6-columns text-center" id="carausel-6-columns-3">
+                    <div class="slider-arrow categories-brand-arrow carausel-6-columns-arrow" id="carausel-6-columns-3-arrows"></div>
+                    <div class="carausel-6-columns text-center" id="carausel-6-columns-3" ref="brandCarousel">
                         <div class="brand-logo">
                             <img class="img-grey-hover" src="/imgs/banner/brand-1.png" alt="" />
                         </div>
