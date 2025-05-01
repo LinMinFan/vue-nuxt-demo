@@ -2,8 +2,12 @@
 
 export default {
     layout: 'default',
-    async asyncData({store, $axios}) {
+    async asyncData({params, store, $axios}) {
+        const { id } = params
 
+        return {
+            id,
+        }
     },
     head() {
 
@@ -78,10 +82,10 @@ export default {
             return this.$store.getters['head/head-middle/categories']
         },
         categoryId() {
-            if (this.$route.params.id === 'all') {
+            if (this.id === 'all') {
                 return 0
             } else {
-                return Number(this.$route.params.id)
+                return Number(this.id)
             }           
         },
         allProducts() {
