@@ -14,6 +14,10 @@ export default {
             pageSize: 3,
             pageSizeOptions: [3, 5, 10, 20],
             sortKey: 'featured',
+            dropdowns: {
+                pageSize: false,
+                sort: false,
+            },
         }
     },
     methods: {
@@ -40,7 +44,29 @@ export default {
         changePageSize(size) {
             this.pageSize = size;
             this.currentPage = 1; // 換每頁數量時，回到第一頁
-        }
+        },
+        toggleDropdown(type) {
+            this.dropdowns[type] = !this.dropdowns[type];
+            // 關閉其他 dropdown
+            Object.keys(this.dropdowns).forEach(key => {
+                if (key !== type) this.dropdowns[key] = false;
+            });
+        },
+        handleClickOutside(event) {
+            const refs = {
+                pageSize: [this.$refs.pageSizeWrap, this.$refs.pageSizeDropdown],
+                sort: [this.$refs.sortWrap, this.$refs.sortDropdown],
+            };
+            for (const [key, [wrap, dropdown]] of Object.entries(refs)) {
+                if (
+                    wrap && dropdown &&
+                    !wrap.contains(event.target) &&
+                    !dropdown.contains(event.target)
+                ) {
+                    this.dropdowns[key] = false;
+                }
+            }
+        },
     },
     computed: {
         currentLang() {
@@ -56,6 +82,26 @@ export default {
         },
         categoryMap() {
             return this.$store.getters['product/products/categoryMap'];
+        },
+        getSortText() {
+            switch (this.sortKey) {
+                case 'priceAsc':
+                    return '價錢低到高';
+                case 'priceDesc':
+                    return '價錢高到低';
+                default:
+                    return '精選';
+            }
+        },
+        sortIcon() {
+            switch (this.sortKey) {
+                case 'priceAsc':
+                    return 'fa fa-sort-amount-up'; // 價錢低到高的排序 icon
+                case 'priceDesc':
+                    return 'fa fa-sort-amount-down'; // 價錢高到低的排序 icon
+                default:
+                    return 'fa fa-star'; // 預設的 icon
+            }
         },
         sortedProducts() {
             const products = [...this.allProducts]; // 複製避免修改原資料
@@ -116,6 +162,12 @@ export default {
             return result;
         },
     },
+    mounted() {
+        document.addEventListener('click', this.handleClickOutside);
+    },
+    beforeDestroy() {
+        document.removeEventListener('click', this.handleClickOutside);
+    },
 }
 </script>
 
@@ -145,11 +197,11 @@ export default {
                                         <div class="sort-by">
                                             <span><i class="fa fa-th"></i>顯示:</span>
                                         </div>
-                                        <div class="sort-by-dropdown-wrap">
+                                        <div class="sort-by-dropdown-wrap" ref="pageSizeWrap" @click="toggleDropdown('pageSize')">
                                             <span>{{ pageSize }} <i class="far fa-angle-down"></i></span>
                                         </div>
                                     </div>
-                                    <div class="sort-by-dropdown">
+                                    <div class="sort-by-dropdown" :class="{ show: dropdowns.pageSize }" ref="pageSizeDropdown">
                                         <ul>
                                             <li v-for="size in pageSizeOptions" :key="size">
                                                 <a
@@ -164,15 +216,15 @@ export default {
                                     </div>
                                 </div>
                                 <div class="sort-by-cover">
-                                    <div class="sort-by-product-wrap">
+                                    <div class="sort-by-product-wrap" ref="sortWrap" @click="toggleDropdown('sort')">
                                         <div class="sort-by">
-                                            <span><i class="fa fa-sort-amount-down"></i>排序:</span>
+                                            <span><i :class="sortIcon"></i>排序:</span>
                                         </div>
                                         <div class="sort-by-dropdown-wrap">
-                                            <span> 精選 <i class="far fa-angle-down"></i></span>
+                                            <span> {{ getSortText }} <i class="far fa-angle-down"></i></span>
                                         </div>
                                     </div>
-                                    <div class="sort-by-dropdown">
+                                    <div class="sort-by-dropdown" :class="{ show: dropdowns.sort }" ref="sortDropdown">
                                         <ul>
                                             <li>
                                                 <a :class="{ active: sortKey === 'featured' }" href="#" @click.prevent="sortKey = 'featured'">精選</a>
