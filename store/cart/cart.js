@@ -29,6 +29,9 @@ export default {
                 console.error('Failed to fetch cart:', error);
             }
         },
+        updatedCart({ commit }, cart) {
+            commit('SET_CART', cart);
+        }
     },
     mutations: {
         SET_CART(state, cart) {

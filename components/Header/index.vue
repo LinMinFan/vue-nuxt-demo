@@ -38,8 +38,9 @@ export default {
 
     },
     methods: {
-        removeItem(id) {
-            this.cartData = this.cartData.filter(item => item.id !== id);
+        removeItem(productId) {
+            const data = this.cartData.filter(item => item.id !== productId);
+            this.$store.dispatch('cart/cart/updatedCart', data);
         },
     },
     watch: {
