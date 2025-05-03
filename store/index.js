@@ -16,6 +16,7 @@ export const actions = {
             await dispatch('cart/cart/init');
             await dispatch('home/slider/init');
             await dispatch('product/products/init');
+            await dispatch('member/wishlist/init');
         } catch (e) {
             console.error('nuxtServerInit error:', e);
         }

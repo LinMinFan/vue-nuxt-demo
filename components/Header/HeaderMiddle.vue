@@ -43,6 +43,9 @@ export default {
         categories() {
             return this.$store.getters['head/head-middle/categories']
         },
+        wishlist() {
+            return this.$store.getters['member/wishlist/wishlist']
+        },
     },
     mounted() {
         this.waitForSelect2Ready().then(() => {
@@ -143,7 +146,9 @@ export default {
                         <div class="header-action-icon-2">
                             <nuxt-link :to="`/${currentLang.code}/member/wishlist`">
                                 <img class="svgInject" alt="wowy" src="/imgs/theme/icons/icon-heart.svg" />
-                                <span class="pro-count blue">4</span>
+                                <span class="pro-count blue">
+                                    {{ wishlist.length }}
+                                </span>
                             </nuxt-link>
                         </div>
                         <div class="header-action-icon-2">

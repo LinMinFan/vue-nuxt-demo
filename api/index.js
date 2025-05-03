@@ -7,6 +7,7 @@ import announcementRequest from './home/news/announcement.js';
 import cartRequest from './cart/cart.js';
 import productRequest from './product/products.js';
 import sliderRequest from './home/main/slider.js';
+import wishlistRequest from './member/wishlist.js';
 
 export const languagesApi = languagesRequest;
 export const categoriesApi = categoriesRequest;
@@ -16,3 +17,4 @@ export const announcementApi = announcementRequest;
 export const cartApi = cartRequest;
 export const productApi = productRequest;
 export const sliderApi = sliderRequest;
+export const wishlistApi = wishlistRequest;
