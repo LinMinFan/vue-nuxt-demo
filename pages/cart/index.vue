@@ -23,8 +23,6 @@ export default {
             const scripts = [
               '/js/plugins/jquery.vticker-min.js',
               '/js/plugins/jquery.theia.sticky.js',
-              '/js/plugins/jquery.elevatezoom.js',
-              /* '/js/shop.js' */
             ];
 
             scripts.forEach(src => {
