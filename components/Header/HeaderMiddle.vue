@@ -179,7 +179,7 @@ export default {
                                 <div class="shopping-cart-footer">
                                     <div class="shopping-cart-total">
                                         <h4>
-                                            Total <span>$ {{ totalPrice }}</span>
+                                            小計 <span>$ {{ totalPrice }}</span>
                                         </h4>
                                     </div>
                                     <div class="shopping-cart-button">

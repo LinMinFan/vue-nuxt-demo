@@ -35,7 +35,13 @@
 
         $('.product-image-slider').on('beforeChange', function (event, slick, currentSlide, nextSlide) {
             var img = $(slick.$slides[nextSlide]).find("img");
-            $('.zoomWindowContainer,.zoomContainer').remove();
+            // 🔥 正確銷毀上一張圖片的 zoom
+            $('.product-image-slider img').each(function () {
+                $(this).removeData('elevateZoom');
+                $(this).off('.elevateZoom'); // 解除相關事件
+            });
+            $('.zoomWindowContainer, .zoomContainer').remove(); // 移除殘留的容器
+
             $(img).elevateZoom({
                 zoomType: "inner",
                 cursor: "crosshair",
@@ -45,12 +51,20 @@
         });
         //Elevate Zoom
         if ( $(".product-image-slider").length ) {
-            $('.product-image-slider .slick-active img').elevateZoom({
+
+            const $img = $('.product-image-slider .slick-active img');
+            // 先銷毀已有 zoom
+            const ez = $img.data('elevateZoom');
+            $('.zoomWindowContainer, .zoomContainer').remove();
+
+            // 初始化
+            $img.elevateZoom({
                 zoomType: "inner",
                 cursor: "crosshair",
                 zoomWindowFadeIn: 500,
                 zoomWindowFadeOut: 750
             });
+
         }
         //Filter color/Size
         $('.list-filter').each(function () {

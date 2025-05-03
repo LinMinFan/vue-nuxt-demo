@@ -34,6 +34,53 @@ export default {
               document.body.appendChild(script);
             });
         },
+        addToCart(quantity = 1) {
+            const product = this.currentProuduct;
+            const productId = product.id;
+            const refEl = this.$refs[`${productId}-qty`]
+            let qty = quantity
+
+            if (refEl) {
+                qty = Number(refEl.innerText)
+            }
+
+            // 將產品物件轉換成購物車格式
+            const cartItem = {
+                id: product.id,
+                name: product.name,
+                price: product.price,
+                image: product.default_img,
+                quantity: qty
+            };
+
+            // 檢查是否已存在購物車
+            const existing = this.cartData.find(item => item.id === productId);
+            let newCartData = [];
+
+            if (existing) {
+                newCartData = this.cartData.map(item => {
+                    if (item.id === productId) {
+                        const newQty = (item.quantity || 0) + qty; // 合併數量
+                        return {
+                            ...item,
+                            quantity: newQty
+                        };
+                    }
+                    return item;
+                });
+            } else {
+                // 若是購物車中沒有此商品，則加入購物車
+                newCartData = [
+                    ...this.cartData,
+                    cartItem
+                ];
+            }
+
+            // 更新購物車資料到 Vuex
+            this.$store.dispatch('cart/cart/updatedCart', newCartData);
+
+            console.log(qty)
+        }
     },
     computed: {
         currentLang() {
@@ -55,10 +102,20 @@ export default {
                 .filter(p => p.category === this.currentProuduct.category && p.id !== this.currentProuduct.id)
                 .slice(0, 4);
         },
+        cartData() {
+            return this.$store.getters['cart/cart/cart']
+        },
     },
     mounted() {
         this.loadProductScripts();
     },
+    beforeDestroy() {
+        $('.product-image-slider img').each(function () {
+            $(this).removeData('elevateZoom');
+            $(this).off('.elevateZoom'); // 解除相關事件
+        });
+        $('.zoomWindowContainer, .zoomContainer').remove(); // 移除殘留的容器
+    }
 }
 </script>
 
@@ -146,13 +203,13 @@ export default {
                                                 <a href="#" class="qty-down" >
                                                     <i class="fa fa-caret-down" aria-hidden="true"></i>
                                                 </a>
-                                                <span class="qty-val">1</span>
+                                                <span class="qty-val" :ref="`${currentProuduct.id}-qty`">1</span>
                                                 <a href="#" class="qty-up" >
                                                     <i class="fa fa-caret-up" aria-hidden="true"></i>
                                                 </a>
                                             </div>
                                             <div class="product-extra-link2">
-                                                <button type="submit" class="button button-add-to-cart">
+                                                <button type="submit" class="button button-add-to-cart" @click="addToCart()">
                                                     {{ $t('add_to_cart') }}
                                                 </button>
                                                 <a :aria-label="$t('add_to_wishlist')" class="action-btn hover-up" href="#"><i class="far fa-heart"></i></a>
