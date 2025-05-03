@@ -21,7 +21,6 @@ export default {
     methods: {
         loadProductScripts() {
             const scripts = [
-              '/js/plugins/jquery.vticker-min.js',
               '/js/plugins/jquery.theia.sticky.js',
             ];
 
