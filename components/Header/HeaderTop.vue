@@ -14,6 +14,7 @@ export default {
     },
     data() {
         return {
+            tickerKey: 0,
         }
     },
     computed: {
@@ -36,16 +37,50 @@ export default {
             return this.$store.getters['head/head-top/announcement']
         },
     },
-    mounted() {
-
-    },
     methods: {
         switchLang(code) {
             switchLanguage(code, { $i18n: this.$i18n, $store: this.$store });
-        }
+        },
+        waitForTickerReady() {
+            return new Promise((resolve) => {
+                const check = () => {
+                    const $ticker = $('#news-flash');
+                    if ($ticker.length && typeof $ticker.vTicker === 'function') {
+                        resolve($ticker);
+                    } else {
+                        setTimeout(check, 250); // 每 50ms 檢查一次
+                    }
+                };
+                check();
+            });
+        },
+        async initTicker() {
+            const $ticker = await this.waitForTickerReady();
+            if ($ticker.data('isInitialized')) return;
+
+            $ticker.vTicker({
+                speed: 500,
+                pause: 3000,
+                animation: 'fade',
+                mousePause: false,
+                showItems: 1
+            });
+
+            $ticker.data('isInitialized', true);
+        },
+    },
+    mounted() {
+        this.initTicker();
     },
     watch: {
-
+        currentLang() {
+            this.tickerKey++;
+        },
+        tickerKey() {
+            this.$nextTick(() => {
+                this.initTicker();
+            });
+        }
     },
 }
 </script>
@@ -61,7 +96,7 @@ export default {
                 </div>
                 <div class="col-xl-6 col-lg-4">
                     <div class="text-center">
-                        <div id="news-flash" class="d-inline-block">
+                        <div id="news-flash" class="d-inline-block" :key="tickerKey">
                             <ul>
                                 <!-- 最新活動 -->
                                 <li v-for="le in latestEvents" :key="le.url">
