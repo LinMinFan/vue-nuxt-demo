@@ -14,7 +14,7 @@ export default {
     },
     data() {
         return {
-            tickerKey: 0,
+
         }
     },
     computed: {
@@ -44,43 +44,49 @@ export default {
         waitForTickerReady() {
             return new Promise((resolve) => {
                 const check = () => {
-                    const $ticker = $('#news-flash');
-                    if ($ticker.length && typeof $ticker.vTicker === 'function') {
-                        resolve($ticker);
+                    if (this.$refs.vTicker && typeof $(this.$refs.vTicker).vTicker === 'function') {
+                        console.log(`✅ vTicker is ready`);
+                        resolve();
                     } else {
-                        setTimeout(check, 250); // 每 50ms 檢查一次
+                        console.log(`⏳ Waiting for vTicker...`);
+                        setTimeout(check, 250);
                     }
                 };
                 check();
             });
         },
         async initTicker() {
-            const $ticker = await this.waitForTickerReady();
-            if ($ticker.data('isInitialized')) return;
-
-            $ticker.vTicker({
-                speed: 500,
-                pause: 3000,
-                animation: 'fade',
-                mousePause: false,
-                showItems: 1
-            });
-
-            $ticker.data('isInitialized', true);
+            if (process.client) {
+                this.$nextTick(() => {
+                    try {
+                        const vTickerElement = $(this.$refs.vTicker);
+                        if (vTickerElement) {
+                            vTickerElement.vTicker( {
+                                speed: 500,
+                                pause: 3000,
+                                animation: 'fade',
+                                mousePause: false,
+                                showItems: 1
+                            });
+                        }
+                    } catch (e) {
+                        console.error('vTicker initialization error:', e);
+                    }
+                });
+            }
         },
     },
     mounted() {
-        this.initTicker();
+        this.waitForTickerReady().then(() => {
+            this.initTicker();
+        });
     },
     watch: {
         currentLang() {
-            this.tickerKey++;
-        },
-        tickerKey() {
-            this.$nextTick(() => {
+            this.waitForTickerReady().then(() => {
                 this.initTicker();
             });
-        }
+        },
     },
 }
 </script>
@@ -96,7 +102,7 @@ export default {
                 </div>
                 <div class="col-xl-6 col-lg-4">
                     <div class="text-center">
-                        <div id="news-flash" class="d-inline-block" :key="tickerKey">
+                        <div id="news-flash" class="d-inline-block" ref="vTicker">
                             <ul>
                                 <!-- 最新活動 -->
                                 <li v-for="le in latestEvents" :key="le.url">
